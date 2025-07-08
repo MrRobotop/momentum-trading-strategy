@@ -1,4 +1,4 @@
-# 📊 Multi-Asset Momentum Trading Strategy
+#  Multi-Asset Momentum Trading Strategy
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![React](https://img.shields.io/badge/React-18.0+-61DAFB.svg)](https://reactjs.org/)
@@ -14,23 +14,23 @@
 
 ---
 
-## 🎯 **Project Overview**
+##  **Project Overview**
 
 This repository contains a **production-ready momentum trading strategy** designed for institutional-quality portfolio management. The system combines rigorous quantitative research with modern software engineering practices to deliver consistent risk-adjusted returns.
 
-### **🏆 Key Achievements**
+### ** Key Achievements**
 - **28.5% Total Return** over 4-year backtest period (vs 22.1% benchmark)
 - **1.38 Sharpe Ratio** with controlled 14.2% volatility
 - **-9.2% Maximum Drawdown** demonstrating robust risk management
 - **0.82 Information Ratio** indicating consistent alpha generation
 
-### **🔬 Strategy Highlights**
+### ** Strategy Highlights**
 - **Multi-Timeframe Momentum**: 3M, 6M, and 12M momentum signals with risk adjustment
 - **Dynamic Portfolio Construction**: Inverse volatility weighting with position constraints
 - **Advanced Risk Management**: VaR, CVaR, and drawdown controls with real-time monitoring
 - **Transaction Cost Modeling**: Realistic 10bps implementation costs with turnover optimization
 
-### **🚀 New Features (v2.0.0)**
+### ** New Features (v2.0.0)**
 - **Real-time Data Streaming** with WebSocket integration for live updates
 - **Advanced Analytics** including ML predictions, factor analysis, and regime detection
 - **Enhanced Visualizations** with interactive charts and professional dashboards
@@ -41,7 +41,7 @@ This repository contains a **production-ready momentum trading strategy** design
 
 ---
 
-## 🏗️ **Architecture & Technology Stack**
+##  **Architecture & Technology Stack**
 
 ### **Backend - Quantitative Engine**
 ```python
@@ -77,9 +77,9 @@ This repository contains a **production-ready momentum trading strategy** design
 
 ---
 
-## 📈 **Strategy Methodology**
+##  **Strategy Methodology**
 
-### **🎯 Signal Generation**
+### ** Signal Generation**
 Our momentum strategy employs a sophisticated multi-factor approach:
 
 ```python
@@ -91,13 +91,13 @@ Momentum Score = 0.2×Mom₃ᴹ + 0.3×Mom₆ᴹ + 0.3×Mom₁₂ᴹ + 0.1×Shar
 - **Sharpe₁₂ᴹ**: Rolling 12-month risk-adjusted returns
 - **VolAdjMom**: Volatility-adjusted momentum scores
 
-### **📊 Portfolio Construction**
+### ** Portfolio Construction**
 1. **Asset Selection**: Cross-sectional ranking → Top N momentum assets
 2. **Position Sizing**: Inverse volatility weighting with constraints (5%-15%)
 3. **Risk Controls**: Portfolio volatility targeting (15% annual) with drawdown limits
 4. **Rebalancing**: Monthly optimization with transaction cost consideration
 
-### **⚠️ Risk Management**
+### **⚠ Risk Management**
 - **Value at Risk (VaR)**: 95% and 99% confidence intervals
 - **Expected Shortfall (CVaR)**: Tail risk measurement and control
 - **Maximum Drawdown**: -20% stop-loss with dynamic position scaling
@@ -105,7 +105,7 @@ Momentum Score = 0.2×Mom₃ᴹ + 0.3×Mom₆ᴹ + 0.3×Mom₁₂ᴹ + 0.1×Shar
 
 ---
 
-## 🚀 **Quick Start**
+##  **Quick Start**
 
 ### **Prerequisites**
 ```bash
@@ -115,7 +115,7 @@ PostgreSQL 12+     # Database for data persistence (optional)
 Git                # Version control and repository management
 ```
 
-### **⚡ Installation**
+### ** Installation**
 
 **1. Clone Repository:**
 ```bash
@@ -139,7 +139,7 @@ cd dashboard
 npm install
 ```
 
-### **🗄️ Database Setup (Optional)**
+### ** Database Setup (Optional)**
 ```bash
 # Install PostgreSQL (macOS)
 brew install postgresql
@@ -156,7 +156,7 @@ export DB_USER=postgres
 export DB_PASSWORD=your_password
 ```
 
-### **📊 Monitoring Setup (Optional)**
+### ** Monitoring Setup (Optional)**
 ```bash
 # Set up email alerts (optional)
 export EMAIL_USERNAME=your_email@gmail.com
@@ -168,7 +168,7 @@ export TO_EMAILS=alerts@yourcompany.com
 export SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK
 ```
 
-### **🎯 Run Strategy Backtest**
+### ** Run Strategy Backtest**
 ```bash
 # Navigate to strategy directory
 cd momentum_strategy
@@ -184,7 +184,7 @@ python main.py --universe diversified_etf --start 2020-01-01 --end 2024-01-01 --
 # ✅ Results saved to results/ directory
 ```
 
-### **📊 Launch Interactive Dashboard**
+### ** Launch Interactive Dashboard**
 ```bash
 cd dashboard
 npm start
@@ -197,9 +197,9 @@ npm start
 
 ---
 
-## 📊 **Performance Results**
+##  **Performance Results**
 
-### **📈 Backtest Summary (2020-2024)**
+### ** Backtest Summary (2020-2024)**
 
 | Metric | Strategy | Benchmark | Outperformance |
 |--------|----------|-----------|----------------|
@@ -210,13 +210,13 @@ npm start
 | **Volatility** | 14.2% | 16.1% | -1.9% |
 | **Information Ratio** | 0.82 | - | - |
 
-### **🎯 Risk Metrics**
+### ** Risk Metrics**
 - **VaR (95%)**: -2.1% daily loss expectation
 - **CVaR (95%)**: -3.2% expected shortfall
 - **Beta**: 0.87 (lower systematic risk than market)
 - **Tracking Error**: 3.8% (controlled active risk)
 
-### **💼 Portfolio Characteristics**
+### ** Portfolio Characteristics**
 - **Average Positions**: 8.3 assets (optimal diversification)
 - **Monthly Turnover**: 12.4% (reasonable transaction costs)
 - **Maximum Position**: 18.5% (concentration control)
@@ -224,7 +224,7 @@ npm start
 
 ---
 
-## 🎨 **Dashboard Screenshots**
+##  **Dashboard Screenshots**
 
 ### **Performance Analytics**
 ![Performance Dashboard](docs/images/performance_dashboard.png)
@@ -240,11 +240,11 @@ npm start
 
 ---
 
-## 📁 **Project Structure**
+##  **Project Structure**
 
 ```
 momentum-trading-strategy/
-├── 📊 momentum_strategy/          # Core quantitative framework
+├──  momentum_strategy/          # Core quantitative framework
 │   ├── __init__.py               # Package initialization
 │   ├── main.py                   # Main execution script
 │   ├── config.py                 # Strategy configuration
@@ -254,30 +254,30 @@ momentum-trading-strategy/
 │   ├── backtest.py               # Backtesting engine
 │   ├── analytics.py              # Performance analytics
 │   └── utils.py                  # Visualization utilities
-├── 📱 dashboard/                  # React analytics dashboard
+├──  dashboard/                  # React analytics dashboard
 │   ├── public/                   # Static assets
 │   ├── src/                      # React components
 │   │   ├── components/           # Dashboard components
 │   │   ├── App.js               # Main application
 │   │   └── index.js             # Application entry point
 │   └── package.json             # Node.js dependencies
-├── 📖 docs/                      # Comprehensive documentation
+├──  docs/                      # Comprehensive documentation
 │   ├── methodology/             # Strategy methodology
 │   ├── api/                     # API documentation
 │   ├── examples/                # Code examples
 │   └── sample_results/          # Sample backtest results
-├── 🧪 tests/                     # Test suite
-├── 📊 results/                   # Backtest outputs
-├── 📋 requirements.txt           # Python dependencies
-├── 📄 README.md                 # Project documentation
-└── 📜 LICENSE                   # MIT License
+├──  tests/                     # Test suite
+├──  results/                   # Backtest outputs
+├──  requirements.txt           # Python dependencies
+├──  README.md                 # Project documentation
+└──  LICENSE                   # MIT License
 ```
 
 ---
 
-## 🛠️ **Advanced Usage**
+##  **Advanced Usage**
 
-### **🎛️ Strategy Configuration**
+### **🎛 Strategy Configuration**
 ```python
 from momentum_strategy import StrategyConfig, StrategyPresets
 
@@ -295,7 +295,7 @@ conservative_config = StrategyPresets.conservative()
 aggressive_config = StrategyPresets.aggressive()
 ```
 
-### **📊 Custom Asset Universes**
+### ** Custom Asset Universes**
 ```python
 # Sector rotation strategy
 python main.py --universe sector_rotation --config aggressive
@@ -307,7 +307,7 @@ python main.py --universe global_equity --start 2019-01-01
 python main.py --universe factor_investing --sensitivity
 ```
 
-### **🔬 Advanced Analytics**
+### ** Advanced Analytics**
 ```python
 # Walk-forward analysis
 strategy.run_walk_forward_analysis(training_period=252, rebalance_freq=63)
@@ -321,22 +321,22 @@ strategy.run_sensitivity_analysis()
 
 ---
 
-## 📊 **Research & Methodology**
+##  **Research & Methodology**
 
-### **📚 Academic Foundation**
+### ** Academic Foundation**
 This strategy implementation is grounded in extensive academic research:
 
 - **Jegadeesh & Titman (1993)**: *"Returns to Buying Winners and Selling Losers"*
 - **Moskowitz & Grinblatt (1999)**: *"Do Industries Explain Momentum?"*
 - **Asness, Moskowitz & Pedersen (2013)**: *"Value and Momentum Everywhere"*
 
-### **🔬 Novel Contributions**
+### ** Novel Contributions**
 - **Multi-Asset Framework**: Extends momentum to cross-asset allocation
 - **Risk-Adjusted Signals**: Incorporates volatility and correlation adjustments  
 - **Transaction Cost Modeling**: Realistic implementation with market impact
 - **Dynamic Sizing**: Volatility-targeted position sizing with constraints
 
-### **📈 Validation**
+### ** Validation**
 - **Out-of-Sample Testing**: Walk-forward analysis with 252-day training windows
 - **Monte Carlo Simulation**: 1000+ scenarios for robust statistical validation
 - **Regime Analysis**: Performance across different market environments
@@ -344,11 +344,11 @@ This strategy implementation is grounded in extensive academic research:
 
 ---
 
-## 🤝 **Contributing**
+##  **Contributing**
 
 We welcome contributions from the quantitative finance community! Here's how to get involved:
 
-### **🔧 Development Setup**
+### ** Development Setup**
 ```bash
 # Fork the repository
 git fork https://github.com/MrRobotop/momentum-trading-strategy.git
@@ -364,13 +364,13 @@ cd dashboard && npm test
 git push origin feature/new-signal-methodology
 ```
 
-### **📋 Contribution Guidelines**
+### ** Contribution Guidelines**
 - **Code Quality**: Follow PEP 8 for Python, ESLint for JavaScript
 - **Testing**: Add unit tests for new functionality
 - **Documentation**: Update docs for API changes
 - **Performance**: Benchmark changes against baseline strategy
 
-### **🎯 Areas for Contribution**
+### ** Areas for Contribution**
 - **New Signal Types**: Alternative momentum measures, mean reversion
 - **Risk Models**: Factor models, correlation forecasting
 - **Execution**: Order splitting, market impact modeling
@@ -378,17 +378,17 @@ git push origin feature/new-signal-methodology
 
 ---
 
-## 📜 **License & Legal**
+##  **License & Legal**
 
 This project is licensed under the **MIT License** - see [LICENSE](LICENSE) for details.
 
-### **⚠️ Important Disclaimers**
+### ** Important Disclaimers**
 - **Educational Purpose**: This code is for educational and research purposes
 - **Not Financial Advice**: Past performance does not guarantee future results
 - **Risk Warning**: All trading involves substantial risk of loss
 - **Professional Consultation**: Consult qualified advisors before implementation
 
-### **🔒 Usage Rights**
+### ** Usage Rights**
 - ✅ **Personal Use**: Free for research and educational purposes
 - ✅ **Academic Research**: Encouraged for academic projects and papers
 - ✅ **Commercial Use**: Permitted under MIT license terms
@@ -396,7 +396,7 @@ This project is licensed under the **MIT License** - see [LICENSE](LICENSE) for 
 
 ---
 
-### **🎯 Hiring**
+### ** Hiring**
 **Looking for quantitative developer opportunities!** This project demonstrates:
 - Advanced quantitative finance knowledge
 - Full-stack development capabilities (Python + React)
@@ -405,26 +405,26 @@ This project is licensed under the **MIT License** - see [LICENSE](LICENSE) for 
 
 ---
 
-## 🙏 **Acknowledgments**
+##  **Acknowledgments**
 
-### **📚 Data Sources**
+### ** Data Sources**
 - **Yahoo Finance** for reliable market data
 - **Federal Reserve Economic Data (FRED)** for risk-free rates
 - **Academic Research** for methodology validation
 
-### **🛠️ Technology Stack**
+### ** Technology Stack**
 - **Python Community** for exceptional quantitative libraries
 - **React Team** for modern frontend framework
 - **Open Source Contributors** for supporting packages
 
-### **🎓 Inspiration**
+### ** Inspiration**
 Special thanks to the quantitative finance research community and open-source contributors who make projects like this possible.
 
 ---
 
-## 🚀 **Production Deployment**
+##  **Production Deployment**
 
-### **🐳 Docker Deployment (Recommended)**
+### ** Docker Deployment (Recommended)**
 ```bash
 # Quick production deployment
 git clone https://github.com/MrRobotop/momentum-trading-strategy.git
@@ -443,19 +443,19 @@ docker-compose up -d
 # Monitoring: http://localhost:3001
 ```
 
-### **☁️ Cloud Deployment**
+### **☁ Cloud Deployment**
 - **AWS**: ECS Fargate with RDS PostgreSQL
 - **Google Cloud**: Cloud Run with Cloud SQL
 - **Azure**: Container Instances with Azure Database
 - **Vercel/Netlify**: Frontend deployment with Supabase backend
 
-### **📊 Monitoring & Alerting**
+### ** Monitoring & Alerting**
 - **System Monitoring**: Prometheus + Grafana dashboards
 - **Application Monitoring**: Custom metrics and health checks
 - **Log Aggregation**: ELK Stack for centralized logging
 - **Alerting**: Email and Slack notifications for critical events
 
-### **🔒 Security Features**
+### ** Security Features**
 - **Database Encryption**: PostgreSQL with SSL/TLS
 - **API Security**: Rate limiting and authentication
 - **Container Security**: Non-root users and minimal images
@@ -465,7 +465,7 @@ docker-compose up -d
 
 ---
 
-## 📊 **Performance Disclaimer**
+##  **Performance Disclaimer**
 
 *This strategy is designed for educational and research purposes. Historical performance results are hypothetical and do not guarantee future performance. All trading and investment activities involve substantial risk of loss. Please consult with qualified financial professionals before making investment decisions.*
 
@@ -473,7 +473,7 @@ docker-compose up -d
 
 <div align="center">
 
-**🚀 Built with passion for quantitative finance**
+** Built with passion for quantitative finance**
 
 [![⭐ Star this repository](https://img.shields.io/badge/⭐-Star%20this%20repository-yellow.svg)](https://github.com/MrRobotop/momentum-trading-strategy)
 [![🍴 Fork this repository](https://img.shields.io/badge/🍴-Fork%20this%20repository-blue.svg)](https://github.com/MrRobotop/momentum-trading-strategy/fork)
