@@ -1,0 +1,285 @@
+# Docker Compose Configuration for Momentum Trading Strategy
+# =========================================================
+# 
+# Production-ready deployment configuration with PostgreSQL database,
+# Redis cache, monitoring, and load balancing.
+# 
+# Author: Rishabh Ashok Patil
+
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: momentum_postgres
+    environment:
+      POSTGRES_DB: momentum_strategy
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secure_password_123}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - momentum_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: momentum_redis
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis_password_123}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - momentum_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Python Strategy Backend
+  strategy_backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: momentum_backend
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=momentum_strategy
+      - DB_USER=postgres
+      - DB_PASSWORD=${DB_PASSWORD:-secure_password_123}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-redis_password_123}
+      - FLASK_ENV=production
+      - PYTHONPATH=/app
+    volumes:
+      - ./momentum_strategy:/app/momentum_strategy
+      - ./logs:/app/logs
+      - ./results:/app/results
+    ports:
+      - "9000:9000"
+    networks:
+      - momentum_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # WebSocket Real-time API
+  realtime_api:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: momentum_realtime
+    command: python realtime_api.py
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=momentum_strategy
+      - DB_USER=postgres
+      - DB_PASSWORD=${DB_PASSWORD:-secure_password_123}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-redis_password_123}
+    volumes:
+      - ./momentum_strategy:/app/momentum_strategy
+      - ./logs:/app/logs
+    ports:
+      - "9001:9001"
+    networks:
+      - momentum_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    container_name: momentum_frontend
+    environment:
+      - REACT_APP_API_URL=http://localhost:9000
+      - REACT_APP_WS_URL=http://localhost:9001
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
+    networks:
+      - momentum_network
+    depends_on:
+      - strategy_backend
+      - realtime_api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Load Balancer
+  nginx:
+    image: nginx:alpine
+    container_name: momentum_nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - momentum_network
+    depends_on:
+      - frontend
+      - strategy_backend
+    restart: unless-stopped
+
+  # Monitoring with Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: momentum_prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - momentum_network
+    restart: unless-stopped
+
+  # Grafana Dashboard
+  grafana:
+    image: grafana/grafana:latest
+    container_name: momentum_grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin123}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    ports:
+      - "3001:3000"
+    networks:
+      - momentum_network
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  # Log Aggregation with ELK Stack
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    container_name: momentum_elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - momentum_network
+    restart: unless-stopped
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.8.0
+    container_name: momentum_kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - momentum_network
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+  # Backup Service
+  backup:
+    image: postgres:15-alpine
+    container_name: momentum_backup
+    environment:
+      - PGPASSWORD=${DB_PASSWORD:-secure_password_123}
+    volumes:
+      - ./backups:/backups
+      - ./scripts/backup.sh:/backup.sh
+    command: |
+      sh -c "
+        chmod +x /backup.sh
+        while true; do
+          /backup.sh
+          sleep 86400  # Daily backups
+        done
+      "
+    networks:
+      - momentum_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+
+networks:
+  momentum_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# Health check and monitoring
+# Use: docker-compose ps to check service status
+# Use: docker-compose logs [service_name] to view logs
+# Use: docker-compose exec [service_name] bash to access container
+
+# Production deployment commands:
+# docker-compose up -d --build
+# docker-compose logs -f
+# docker-compose down
+# docker-compose restart [service_name]
+
+# Author: Rishabh Ashok Patil
+# Version: 2.0.0
+# Last Updated: January 2025

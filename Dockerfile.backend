@@ -1,0 +1,97 @@
+# Multi-stage Dockerfile for Python Backend
+# ==========================================
+# 
+# Production-ready Docker image for momentum strategy backend
+# with optimized layers, security, and performance.
+# 
+# Author: Rishabh Ashok Patil
+
+# Build stage
+FROM python:3.9-slim as builder
+
+# Set build arguments
+ARG BUILD_DATE
+ARG VERSION=2.0.0
+ARG VCS_REF
+
+# Add metadata
+LABEL maintainer="Rishabh Ashok Patil" \
+      version="${VERSION}" \
+      description="Momentum Trading Strategy Backend" \
+      build-date="${BUILD_DATE}" \
+      vcs-ref="${VCS_REF}"
+
+# Install system dependencies for building
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    gcc \
+    g++ \
+    libpq-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Production stage
+FROM python:3.9-slim as production
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    libpq5 \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Create non-root user for security
+RUN groupadd -r momentum && useradd -r -g momentum momentum
+
+# Copy virtual environment from builder
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Set working directory
+WORKDIR /app
+
+# Copy application code
+COPY momentum_strategy/ ./momentum_strategy/
+COPY tests/ ./tests/
+COPY run_tests.py ./
+
+# Create necessary directories
+RUN mkdir -p logs results data/raw data/processed && \
+    chown -R momentum:momentum /app
+
+# Copy startup scripts
+COPY scripts/entrypoint.sh /entrypoint.sh
+COPY scripts/healthcheck.sh /healthcheck.sh
+RUN chmod +x /entrypoint.sh /healthcheck.sh
+
+# Set environment variables
+ENV PYTHONPATH=/app \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Expose ports
+EXPOSE 9000 9001
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD /healthcheck.sh
+
+# Switch to non-root user
+USER momentum
+
+# Set entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Default command
+CMD ["python", "momentum_strategy/simple_api.py"]

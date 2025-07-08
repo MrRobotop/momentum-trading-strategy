@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="description" content="Interactive dashboard for multi-asset momentum trading strategy analysis" />
+    <meta name="keywords" content="quantitative finance, momentum trading, financial dashboard, trading strategy, portfolio analytics" />
+    <meta name="author" content="Quantitative Developer" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Momentum Strategy Dashboard" />
+    <meta property="og:description" content="Professional quantitative trading strategy dashboard with real-time analytics" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="Momentum Strategy Dashboard" />
+    <meta property="twitter:description" content="Professional quantitative trading strategy dashboard with real-time analytics" />
+    
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Critical CSS for initial render -->
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: #f8fafc;
+        color: #1e293b;
+        line-height: 1.5;
+      }
+      
+      /* Loading spinner */
+      .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f8fafc;
+      }
+      
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #e2e8f0;
+        border-top: 4px solid #2563eb;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .loading-text {
+        margin-top: 16px;
+        color: #64748b;
+        font-weight: 500;
+      }
+      
+      #root {
+        min-height: 100vh;
+      }
+      
+      /* Ensure charts are responsive */
+      .recharts-wrapper {
+        font-family: 'Inter', sans-serif !important;
+      }
+      
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+    </style>
+    
+    <title>Momentum Strategy Dashboard | Quantitative Finance Analytics</title>
+  </head>
+  <body>
+    <noscript>
+      <div style="padding: 20px; text-align: center; background-color: #fef2f2; color: #dc2626; border: 1px solid #fecaca;">
+        <h2>JavaScript Required</h2>
+        <p>This dashboard requires JavaScript to display interactive financial analytics. Please enable JavaScript in your browser settings.</p>
+      </div>
+    </noscript>
+    
+    <!-- Loading screen shown while React loads -->
+    <div id="loading" class="loading-container">
+      <div>
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading Strategy Dashboard...</div>
+      </div>
+    </div>
+    
+    <div id="root"></div>
+    
+    <!-- Remove loading screen once React has loaded -->
+    <script>
+      // Hide loading screen once React renders
+      window.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+          const loading = document.getElementById('loading');
+          if (loading) {
+            loading.style.display = 'none';
+          }
+        }, 100);
+      });
+    </script>
+    
+    <!-- Performance monitoring (optional) -->
+    <script>
+      // Basic performance monitoring
+      window.addEventListener('load', function() {
+        const loadTime = performance.now();
+        console.log(`Dashboard loaded in ${loadTime.toFixed(2)}ms`);
+        
+        // Report Core Web Vitals
+        if ('web-vitals' in window) {
+          import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+            getCLS(console.log);
+            getFID(console.log);
+            getFCP(console.log);
+            getLCP(console.log);
+            getTTFB(console.log);
+          });
+        }
+      });
+      
+      // Error boundary for unhandled errors
+      window.addEventListener('error', function(event) {
+        console.error('Global error:', event.error);
+      });
+      
+      window.addEventListener('unhandledrejection', function(event) {
+        console.error('Unhandled promise rejection:', event.reason);
+      });
+    </script>
+  </body>
+</html>
